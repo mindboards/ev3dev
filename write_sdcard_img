@@ -40,7 +40,7 @@ cd ../ev3dev-rootfs
 
 echo -n "   gunzipping the raw SD Card image - should take about 2 minutes..."
 
-gunzip -k ev3dev.img.gz
+gunzip ev3dev.img.gz
 
 echo " done."
 
