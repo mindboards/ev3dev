@@ -2,8 +2,6 @@
 # ------------------------------------------------------------------------------
 # write_sdcard_img - uncompresses the img.gz file to a .img file and then
 #                    writes the raw SD Card data
-#
-# Requires a udev rule that creates a device symlink at /dev/ev3dev
 # ------------------------------------------------------------------------------
 
 error_out () {
@@ -15,17 +13,20 @@ if [ "$(whoami)" != "root" ]; then
 	error_out "Sorry, you are not root."
 fi
 
-if [ ! -e /dev/ev3dev ]; then
-    error_out "Error - /dev/ev3dev does not exist - have you set up the udev rules to create it?\n"
+# extract and validate device from command line arguments
+if [ $# -ne 1 ]; then
+  echo "usage: ./write_sdcard_img <device>" && exit
+fi
+device=$1;
+if [ ! -b $device ]; then
+  echo "$device: not found or no block device" && exit 1
 fi
 
 # ------------------------------------------------------------------------------
 
-device=$(readlink /dev/ev3dev)
-
-umount "/dev/${device}1"
-umount "/dev/${device}2"
-umount "/dev/${device}"
+umount "${device}1"
+umount "${device}2"
+umount "${device}"
 
 sleep 1
 
@@ -56,7 +57,7 @@ echo " done."
 
 echo    "   Writing the raw SD Card image - should take about 5 minutes..."
 
-dd bs=4M if=ev3dev.img of=/dev/ev3dev
+dd bs=4M if=ev3dev.img of=$device
 
 if [ $? -gt 0 ]; then
     error_out "   SD Card image write failed"
