@@ -1,4 +1,4 @@
-#! /bin/dash
+#!/bin/sh
 # ------------------------------------------------------------------------------
 # populate_sdcard.sh - puts uImage on the FAT32 partition
 #                    - puts target-rootfs on the ext3 partition

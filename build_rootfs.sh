@@ -1,4 +1,4 @@
-#! /bin/dash
+#!/bin/sh
 # ------------------------------------------------------------------------------
 # build-rootfs.sh - download and configure a minimal rootfs for ev3dev
 #

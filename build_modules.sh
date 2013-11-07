@@ -1,4 +1,4 @@
-#! /bin/dash
+#!/bin/sh
 #******************************************************************************************************************
 #     COMPILE KERNEL
 #******************************************************************************************************************
@@ -6,7 +6,7 @@
 
 echo
 echo -------------------------------------------------------------------------------
-echo BUILDING KCONFIG
+echo BUILDING MODULES
 echo -------------------------------------------------------------------------------
 echo
 sleep 1
@@ -15,26 +15,28 @@ project=`pwd`
 
 echo ${project}
 
-. ./env_setup
+. ./env_setup.sh
 
 echo ${AM1808_COMPILER}
+echo ${AM1808_KERNEL}
 
 PATH=${AM1808_COMPILER}:$PATH
 
 echo ${PATH}
- 
-cd "${AM1808_KERNEL}"
 
-echo "Now we're in $(pwd)"
+if [ ! -e modules ]; then
+  mkdir -p ./modules
+fi
 
-cp ${project}/ev3dev.config ${AM1808_KERNEL}/.config
+for module in "d_ui" "d_pwm" 
+# for module in "d_pwm" 
+do 
+    cd ../ev3dev-modules/lms2012/${module}/Linuxmod_AM1808
+    echo "Now we're in $(pwd)"
+    make -C ${AM1808_KERNEL} MOD=${module} M=`pwd` ARCH=arm CROSS_COMPILE=${AM1808_ABI}
+    cd ${project}
+    cp ../ev3dev-modules/lms2012/${module}/Linuxmod_AM1808/*.ko ./modules
+done
 
-echo "BUILDING KCONFIG"
-
-make ARCH=arm CROSS_COMPILE=${AM1808_ABI} menuconfig
-
-echo "COPYING .config BACK"
-
-cp ${AM1808_KERNEL}/.config ${project}/ev3dev.config.new 
-
+# cp $1.ko $AM1808_MODULES/$1.ko
 

@@ -1,4 +1,4 @@
-#! /bin/dash
+#!/bin/sh
 # ------------------------------------------------------------------------------
 # create_sdcard.sh - repartitions and formats an SD card for use with the
 #                    LEGO MINDSTORMS EV3

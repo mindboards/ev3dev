@@ -1,4 +1,4 @@
-#! /bin/dash
+#!/bin/sh
 #******************************************************************************************************************
 #     COMPILE KERNEL
 #******************************************************************************************************************
@@ -6,7 +6,7 @@
 
 echo
 echo -------------------------------------------------------------------------------
-echo BUILDING MODULES
+echo BUILDING KERNEL
 echo -------------------------------------------------------------------------------
 echo
 sleep 1
@@ -15,28 +15,38 @@ project=`pwd`
 
 echo ${project}
 
-. ./env_setup
+. ./env_setup.sh
 
 echo ${AM1808_COMPILER}
-echo ${AM1808_KERNEL}
 
 PATH=${AM1808_COMPILER}:$PATH
+# PATH=${AM1808_UBOOT_DIR}/tools:$PATH
 
 echo ${PATH}
+ 
+cd ${AM1808_KERNEL}
 
-if [ ! -e modules ]; then
-  mkdir -p ./modules
+echo "Now we're in $(pwd)"
+
+arm-none-eabi-gcc -v
+
+if [ "$1" = "clean" ]
+then
+  make distclean ARCH=arm CROSS_COMPILE=${AM1808_ABI}
 fi
 
-for module in "d_ui" "d_pwm" 
-# for module in "d_pwm" 
-do 
-    cd ../ev3dev-modules/lms2012/${module}/Linuxmod_AM1808
-    echo "Now we're in $(pwd)"
-    make -C ${AM1808_KERNEL} MOD=${module} M=`pwd` ARCH=arm CROSS_COMPILE=${AM1808_ABI}
-    cd ${project}
-    cp ../ev3dev-modules/lms2012/${module}/Linuxmod_AM1808/*.ko ./modules
-done
+cp ${project}/ev3dev.config ${AM1808_KERNEL}/.config
 
-# cp $1.ko $AM1808_MODULES/$1.ko
+echo "CROSS COMPILING KERNEL"
+
+make ARCH=arm CROSS_COMPILE=${AM1808_ABI}
+
+echo "BUILDING BOOTABLE IMAGE"
+
+make -j4 uImage ARCH=arm CROSS_COMPILE=${AM1808_ABI}
+
+echo "COPYING BOOTABLE IMAGE TO LOCAL DIRECTORY"
+
+cp ${AM1808_KERNEL}/arch/arm/boot/uImage ${project}/uImage
+
 
