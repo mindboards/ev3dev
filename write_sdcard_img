@@ -4,13 +4,8 @@
 #                    writes the raw SD Card data
 # ------------------------------------------------------------------------------
 
-error_out () {
-    echo "$1"
-    exit 1
-}
-
 if [ "$(whoami)" != "root" ]; then
-	error_out "Sorry, you are not root."
+	echo "Sorry, you are not root." && exit 1
 fi
 
 # extract and validate device from command line arguments
@@ -41,7 +36,7 @@ echo -n "   Type \"Yes\" to continue ... "
 read YesNo
 
 if [ ! "${YesNo}" = "Yes" ]; then
-    error_out "\n    .. aborting, you typed \"${YesNo}\""
+    echo "\n    .. aborting, you typed \"${YesNo}\"" && exit 1
 fi
 
 # ------------------------------------------------------------------------------
@@ -60,7 +55,7 @@ echo    "   Writing the raw SD Card image - should take about 5 minutes..."
 dd bs=4M if=ev3dev.img of=$device
 
 if [ $? -gt 0 ]; then
-    error_out "   SD Card image write failed"
+    echo "   SD Card image write failed" && exit 1
 else
     echo " done."
 fi
