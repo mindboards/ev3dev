@@ -17,11 +17,12 @@ if [ ! -b $device ]; then
   echo "$device: not found or no block device" && exit 1
 fi
 
-# ------------------------------------------------------------------------------
+# abort if device is still mounted
+if mount | grep "^$device" > /dev/null; then
+  echo "$device: device or partition is mounted. unmount manually and resume" && exit 1
+fi
 
-umount "${device}1"
-umount "${device}2"
-umount "${device}"
+# ------------------------------------------------------------------------------
 
 sleep 1
 
