@@ -14,28 +14,23 @@ if [ $# -ne 1 ]; then
 fi
 device=$1;
 if [ ! -b $device ]; then
-  echo "$device: not found or no block device" && exit 1
+  echo "error: $device: not found or no block device" && exit 1
 fi
 
 # abort if device is still mounted
 if mount | grep "^$device" > /dev/null; then
-  echo "$device: device or partition is mounted. unmount manually and resume" && exit 1
+  echo "error: $device: the following partitions are mounted:"
+  mount | grep "^$device"
+  echo "unmount manually and retry" && exit 1
 fi
 
 # ------------------------------------------------------------------------------
 
-echo "-------------------------------------------------------------------------------"
-echo "WARNING - If you type \"Yes\" to the prompt, this script"
-echo "          will OVERWRITE the existing ev3dev.img file on the hard drive and"
-echo "          will OVERWRITE any data on the /dev/ev3dev SD Card"
-echo "-------------------------------------------------------------------------------"
-echo
-
-echo -n "   Type \"Yes\" to continue ... "
-read YesNo
-
-if [ ! "${YesNo}" = "Yes" ]; then
-    echo "\n    .. aborting, you typed \"${YesNo}\"" && exit 1
+# prompt for card erase confirmation
+echo "Warning - this script will erase all data on device $device"
+read -p "  Continue? [y/N] " -r
+if [[ ! "$REPLY" =~ ^[yY] ]]; then
+  exit 1
 fi
 
 # ------------------------------------------------------------------------------
