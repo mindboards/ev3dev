@@ -24,8 +24,6 @@ fi
 
 # ------------------------------------------------------------------------------
 
-sleep 1
-
 echo "-------------------------------------------------------------------------------"
 echo "WARNING - If you type \"Yes\" to the prompt, this script"
 echo "          will OVERWRITE the existing ev3dev.img file on the hard drive and"
@@ -62,7 +60,5 @@ else
 fi
 
 echo " done."
-
-cd ${OLDPWD}
 
 echo "-------------------------------------------------------------------------------"
