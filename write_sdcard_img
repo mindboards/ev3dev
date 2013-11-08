@@ -63,10 +63,9 @@ fi
 # Unzip the raw SD Card image, if necessary
 
 echo "extracting ev3dev image..."
-if [ -f ev3dev.img ] && [ -f ev3dev.img.gz ] && [ ev3dev.img -ot ev3dev.img.gz ]
+if [ ! -f ev3dev.img ] || ([ -f ev3dev.img.gz ] && [ ev3dev.img -ot ev3dev.img.gz ])
   gunzip < ev3dev.img.gz > ev3dev.img
 fi
-
 
 # ------------------------------------------------------------------------------
 # Copy SD Card image to device
