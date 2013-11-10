@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Update in case anything has changed
 
 apt-get update

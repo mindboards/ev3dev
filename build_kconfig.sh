@@ -1,4 +1,4 @@
-#! /bin/dash
+#!/bin/sh
 #******************************************************************************************************************
 #     COMPILE KERNEL
 #******************************************************************************************************************
@@ -6,7 +6,7 @@
 
 echo
 echo -------------------------------------------------------------------------------
-echo BUILDING KERNEL
+echo BUILDING KCONFIG
 echo -------------------------------------------------------------------------------
 echo
 sleep 1
@@ -15,38 +15,26 @@ project=`pwd`
 
 echo ${project}
 
-. ./env_setup
+. ./env_setup.sh
 
 echo ${AM1808_COMPILER}
 
 PATH=${AM1808_COMPILER}:$PATH
-# PATH=${AM1808_UBOOT_DIR}/tools:$PATH
 
 echo ${PATH}
  
-cd ${AM1808_KERNEL}
+cd "${AM1808_KERNEL}"
 
 echo "Now we're in $(pwd)"
 
-arm-none-eabi-gcc -v
-
-if [ "$1" = "clean" ]
-then
-  make distclean ARCH=arm CROSS_COMPILE=${AM1808_ABI}
-fi
-
 cp ${project}/ev3dev.config ${AM1808_KERNEL}/.config
 
-echo "CROSS COMPILING KERNEL"
+echo "BUILDING KCONFIG"
 
-make ARCH=arm CROSS_COMPILE=${AM1808_ABI}
+make ARCH=arm CROSS_COMPILE=${AM1808_ABI} menuconfig
 
-echo "BUILDING BOOTABLE IMAGE"
+echo "COPYING .config BACK"
 
-make -j4 uImage ARCH=arm CROSS_COMPILE=${AM1808_ABI}
-
-echo "COPYING BOOTABLE IMAGE TO LOCAL DIRECTORY"
-
-cp ${AM1808_KERNEL}/arch/arm/boot/uImage ${project}/uImage
+cp ${AM1808_KERNEL}/.config ${project}/ev3dev.config.new 
 
 
