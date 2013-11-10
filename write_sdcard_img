@@ -49,6 +49,17 @@ if [[ ! "$REPLY" =~ ^[yY] ]]; then
 fi
 
 # ------------------------------------------------------------------------------
+# prompt for additional confirmation if device is non-removable
+
+if [ "$(cat /sys/block/$(basename $device)/removable)" != "1" ]; then
+  echo "WARNING!!! $device is listed as non-removable. Do you know what you are doing?"
+  read -p "  Continue anyway? [y/N] " -r
+  if [[ ! "$REPLY" =~ ^[yY] ]]; then
+    exit 1
+  fi
+fi
+
+# ------------------------------------------------------------------------------
 # look for ev3dev-rootfs and ev3dev.img.gz
 
 if [ ! -d ../ev3dev-rootfs ]; then
