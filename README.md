@@ -99,6 +99,7 @@ git clone git@github.com:mindboards/ev3dev-rootfs.git
 Now that you have the script directory and the rootfs directory, it's a simple matter to set up the SD Card and write the new image to it, like this:
 
 ````
+cd ev3dev
 sudo ./write_sdcard_img
 ````
 
