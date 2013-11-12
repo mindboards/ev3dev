@@ -170,7 +170,7 @@ ssh ev3dev@192.168.x.x
 # Now you have a complete Debian 7 EV3!
 ````
 
-4.3 Building The rootfs From Scratch
+4.4 Building The rootfs From Scratch
 ------------------------------------
 
 If you're really abitious, you can build the rootfs from scratch, all the required scripts are in the ev3dev folder. Here are the exact steps I use on a clean, fresh, minimal Ubuntu or Debian machine. I'll leave it to you to get access to such a machine somehow.
