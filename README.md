@@ -80,9 +80,7 @@ I'm going to assume you have git installed and set up on your computer, and that
 
 I'm going to suggest that you set up your ev3dev environment in your HOME directory for now. If we decide to change things around it's pretty easy to symlink things to get the right layout.
 
-I tend to do a lot of development using nfs mounts, so here's the location going to suggest:
-
-~/nfs/ev3
+I tend to do a lot of development using nfs mounts, so here's the location going to suggest: ```~/nfs/ev3```
 
 After we get things going, we can mount this directory on the EV3 - which means the EV3 can get at our scripts more easily, and we can copy stuff to the microSD card without having to unplug the card from the EV3.
 
