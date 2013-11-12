@@ -92,8 +92,8 @@ Create your new directory, navigate to it and then run the following commands:
 mkdir -p ~/nfs/ev3
 cd       ~/nfs/ev3
 
-git clone git@github.com:mindboards/ev3dev.git
-git clone git@github.com:mindboards/ev3dev-rootfs.git
+git clone git://github.com/mindboards/ev3dev.git
+git clone git://github.com/mindboards/ev3dev-rootfs.git
 ````
 
 Now that you have the script directory and the rootfs directory, it's a simple matter to set up the SD Card and write the new image to it, like this:
