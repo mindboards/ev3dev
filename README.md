@@ -45,7 +45,7 @@ Features above and beyond the official LEGO kernel include:
 
 Don't want to give up your official LEGO MINDSTORMS EV3 kernel and rootfs? You don't need to!
 
-Just install ev3dev on any microSD card (min 1GB suggested, but can you even buy one that small anymore?) and plug it into the microSD slot on the EV3. The uboot loader will look on the card, find the ev3dev kernel and happily boot that instead!
+Just install ev3dev on any microSD card (min 4GB) and plug it into the microSD slot on the EV3. The uboot loader will look on the card, find the ev3dev kernel and happily boot that instead!
 
 When you want to use the official LEGO tools, just shutdown the EV3, unplug the ev3dev microSD card and restart the brick.
 
