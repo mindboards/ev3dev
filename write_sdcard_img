@@ -18,8 +18,12 @@ fi
 # ------------------------------------------------------------------------------
 # evaluate user and command line parmeters
 
-if [ "$(id -u)" != "0" ]; then
-  echo "error: this script has to be run as root." && exit 1
+if [ "$(id -u)" == "0" ]; then
+  echo "warning: this script should not be run as root." >&2
+  read -p "  Continue anyway? [y/N] " -r
+  if [[ ! "$REPLY" =~ ^[yY] ]]; then
+    exit 1
+  fi
 fi
 
 if [ $# -ne 1 ]; then
@@ -27,22 +31,22 @@ if [ $# -ne 1 ]; then
 fi
 device=$1;
 if [ ! -b $device ]; then
-  echo "error: $device: not found or no block device" && exit 1
+  echo "error: $device: not found or no block device" >&2 && exit 1
 fi
 
 # ------------------------------------------------------------------------------
 # abort if device is still mounted
 
 if mount | grep "^$device" > /dev/null; then
-  echo "error: $device: the following partitions are mounted:"
-  mount | grep "^$device"
-  echo "unmount manually and retry" && exit 1
+  echo "error: $device: the following partitions are mounted:" >&2
+  mount | grep "^$device" >&2
+  echo "unmount manually and retry" >&2 && exit 1
 fi
 
 # ------------------------------------------------------------------------------
 # prompt for card erase confirmation
 
-echo "Warning - this script will erase all data on device $device"
+echo "Warning - this script will erase all data on device $device." >&2
 read -p "  Continue? [y/N] " -r
 if [[ ! "$REPLY" =~ ^[yY] ]]; then
   exit 1
@@ -52,7 +56,7 @@ fi
 # prompt for additional confirmation if device is non-removable
 
 if [ "$(cat /sys/block/$(basename $device)/removable)" != "1" ]; then
-  echo "WARNING!!! $device is listed as non-removable. Do you know what you are doing?"
+  echo "WARNING!!! $device is listed as non-removable. Do you know what you are doing?" >&2
   read -p "  Continue anyway? [y/N] " -r
   if [[ ! "$REPLY" =~ ^[yY] ]]; then
     exit 1
@@ -63,18 +67,18 @@ fi
 # look for ev3dev-rootfs and ev3dev.img.gz
 
 if [ ! -d ../ev3dev-rootfs ]; then
-  echo "error: ../ev3dev-rootfs not found. Did you forget the rootfs repository?" && exit 1
+  echo "error: ../ev3dev-rootfs not found. Did you forget the rootfs repository?" >&2 && exit 1
 fi
 cd ../ev3dev-rootfs
 if [ ! -f ev3dev.img.gz ] || [ ! -f ev3dev.img ]; then
-  echo "error: ev3dev image not found. Did you forget the rootfs repository?" && exit 1
+  echo "error: ev3dev image not found. Did you forget the rootfs repository?" >&2 && exit 1
 fi
 
 # ------------------------------------------------------------------------------
 # Unzip the raw SD Card image, if necessary
 
 echo "extracting ev3dev image..."
-if [ ! -f ev3dev.img ] || [ ev3dev.img -ot ev3dev.img.gz ]
+if [ ! -f ev3dev.img ] || [ ev3dev.img -ot ev3dev.img.gz ]; then
   gunzip < ev3dev.img.gz > ev3dev.img
 fi
 
@@ -82,6 +86,10 @@ fi
 # Copy SD Card image to device
 
 echo "writing ev3dev image to $device..."
+
+if [ ! -w "$device" ]; then
+  echo "error: no write permissions on $device. Fix file permissions and retry." >&2 && exit 1
+fi
 dd bs=4M if=ev3dev.img of=$device || (echo "error: $device: write failed!" && exit 1)
 
 echo "done."
