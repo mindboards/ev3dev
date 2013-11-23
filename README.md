@@ -101,7 +101,7 @@ sudo cp 10-ev3dev.rules /etc/udev/rules.d/
 sudo vi /etc/udev/rules.d/10-ev3dev.rules
 # change the vendor id, product id and serial number to match your SD card
 ````
-See [this post](see http://hempeldesigngroup.com/embedded/2013/09/27/mistake-proofing-your-sd-card-mounts/) for more info, like how to find the product id, etc.
+See [this post](http://hempeldesigngroup.com/embedded/2013/09/27/mistake-proofing-your-sd-card-mounts/) for more info, like how to find the product id, etc.
 
 Now that you have the script directory and the rootfs directory and the udev rules setup, it's a simple matter to set up the SD Card and write the new image to it, like this:
 
