@@ -2,71 +2,95 @@
 # ------------------------------------------------------------------------------
 # write_sdcard_img - uncompresses the img.gz file to a .img file and then
 #                    writes the raw SD Card data
-#
-# Requires a udev rule that creates a device symlink at /dev/ev3dev
 # ------------------------------------------------------------------------------
 
-error_out () {
-    echo "$1"
+
+# ------------------------------------------------------------------------------
+# set shell options
+
+set -e
+set -u
+
+if [ -n "${DEBUG:-}" ]; then
+  set -x
+fi
+
+# ------------------------------------------------------------------------------
+# evaluate user and command line parmeters
+
+if [ "$(id -u)" == "0" ]; then
+  echo "warning: this script should not be run as root." >&2
+  read -p "  Continue anyway? [y/N] " -r
+  if [[ ! "$REPLY" =~ ^[yY] ]]; then
     exit 1
-}
-
-if [ "$(whoami)" != "root" ]; then
-	error_out "Sorry, you are not root."
+  fi
 fi
 
-if [ ! -e /dev/ev3dev ]; then
-    error_out "Error - /dev/ev3dev does not exist - have you set up the udev rules to create it?\n"
+if [ $# -ne 1 ]; then
+  echo "usage: ./write_sdcard_img <device>" && exit
 fi
-
-# ------------------------------------------------------------------------------
-
-device=$(readlink /dev/ev3dev)
-
-umount "/dev/${device}1"
-umount "/dev/${device}2"
-umount "/dev/${device}"
-
-sleep 1
-
-echo "-------------------------------------------------------------------------------"
-echo "WARNING - If you type \"Yes\" to the prompt, this script"
-echo "          will OVERWRITE the existing ev3dev.img file on the hard drive and"
-echo "          will OVERWRITE any data on the /dev/ev3dev SD Card"
-echo "-------------------------------------------------------------------------------"
-echo
-
-echo -n "   Type \"Yes\" to continue ... "
-read YesNo
-
-if [ ! "${YesNo}" = "Yes" ]; then
-    error_out "\n    .. aborting, you typed \"${YesNo}\""
+device=$1;
+if [ ! -b $device ]; then
+  echo "error: $device: not found or no block device" >&2 && exit 1
 fi
 
 # ------------------------------------------------------------------------------
-# Unzip the raw SD Card image
+# abort if device is still mounted
 
+if mount | grep "^$device" > /dev/null; then
+  echo "error: $device: the following partitions are mounted:" >&2
+  mount | grep "^$device" >&2
+  echo "unmount manually and retry" >&2 && exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# prompt for card erase confirmation
+
+echo "Warning - this script will erase all data on device $device." >&2
+read -p "  Continue? [y/N] " -r
+if [[ ! "$REPLY" =~ ^[yY] ]]; then
+  exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# prompt for additional confirmation if device is non-removable
+
+if [ "$(cat /sys/block/$(basename $device)/removable)" != "1" ]; then
+  echo "WARNING!!! $device is listed as non-removable. Do you know what you are doing?" >&2
+  read -p "  Continue anyway? [y/N] " -r
+  if [[ ! "$REPLY" =~ ^[yY] ]]; then
+    exit 1
+  fi
+fi
+
+# ------------------------------------------------------------------------------
+# look for ev3dev-rootfs and ev3dev.img.gz
+
+if [ ! -d ../ev3dev-rootfs ]; then
+  echo "error: ../ev3dev-rootfs not found. Did you forget the rootfs repository?" >&2 && exit 1
+fi
 cd ../ev3dev-rootfs
-
-echo -n "   gunzipping the raw SD Card image - should take about 2 minutes..."
-
-gunzip -k ev3dev.img.gz
-
-echo " done."
-
-echo    "   Writing the raw SD Card image - should take about 5 minutes..."
-
-dd bs=4M if=ev3dev.img of=/dev/ev3dev
-
-if [ $? -gt 0 ]; then
-    error_out "   SD Card image write failed"
-else
-    echo " done."
+if [ ! -f ev3dev.img.gz ] || [ ! -f ev3dev.img ]; then
+  echo "error: ev3dev image not found. Did you forget the rootfs repository?" >&2 && exit 1
 fi
 
-echo " done."
+# ------------------------------------------------------------------------------
+# Unzip the raw SD Card image, if necessary
 
-cd ${OLDPWD}
+echo "extracting ev3dev image..."
+if [ ! -f ev3dev.img ] || [ ev3dev.img -ot ev3dev.img.gz ]; then
+  gunzip < ev3dev.img.gz > ev3dev.img
+fi
 
-echo "-------------------------------------------------------------------------------"
-exit
+# ------------------------------------------------------------------------------
+# Copy SD Card image to device
+
+echo "writing ev3dev image to $device..."
+
+if [ ! -w "$device" ]; then
+  echo "error: no write permissions on $device. Fix file permissions and retry." >&2 && exit 1
+fi
+dd bs=4M if=ev3dev.img of=$device || (echo "error: $device: write failed!" && exit 1)
+
+echo "done."
+
