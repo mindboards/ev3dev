@@ -1,6 +1,6 @@
 #! /bin/dash
 # ------------------------------------------------------------------------------
-# populate_sdcard.sh - puts uImage on the FAT32 partition
+# populate_sdcard.sh - puts uImage and boot.scr on the FAT32 partition
 #                    - puts target-rootfs on the ext3 partition
 #
 # Requires a udev rule that creates a device symlink at /dev/ev3dev
@@ -56,6 +56,9 @@ if [ -d "./LMS2012" ]; then
 
     echo -n "    copying uImage to LMS2012 ... "
     cp      "./uImage" ./LMS2012
+    echo    " done."
+    echo -n "    copying boot.scr to LMS2012 ... "
+    cp      "./boot.scr" ./LMS2012
     echo    " done."
 fi 
 
