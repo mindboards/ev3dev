@@ -112,8 +112,8 @@ cd ../ev3dev-rootfs
        chroot ev3-rootfs passwd 
 
        echo -n "    Adding the ev3dev user ... "
-       chroot ${TARGET_ROOTFS_DIR} useradd -m -G sudo,plugdev ev3dev
-       chroot ${TARGET_ROOTFS_DIR} usermod -s /bin/bash       ev3dev
+       chroot ${TARGET_ROOTFS_DIR} useradd -m -G sudo,plugdev,video ev3dev
+       chroot ${TARGET_ROOTFS_DIR} usermod -s /bin/bash ev3dev
 
        # Additional groups we'll add later...
        # ,netdev,audio,video,ssh
