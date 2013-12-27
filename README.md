@@ -61,7 +61,7 @@ This is still an early beta, so it's not as polished as the official LEGO offeri
 3. Repository Descriptions
 --------------------------
 
-The ev3dev system is kept in 4 repositories, each with a specific purpose. What's cool about bthis is that you don't need to have a GitHub account unless you want to help develop the project. 
+The ev3dev system is kept in 4 repositories, each with a specific purpose. What's cool about this is that you don't need to have a GitHub account unless you want to help develop the project. 
 
 To get started, just look at the Releases tab and grab the latest and greatest ev3dev.img file. Then check out the [ev3dev wiki](https://github.com/mindboards/ev3dev/wiki) for detailed installation instructions for Linux/OSX/Windows.
 
@@ -80,7 +80,7 @@ Building this custom Linux distribution is a lot of work, even on a Linux host s
 
 Naturally the scripts run on pretty much any modern Linux system, but they don't work on Windows or Mac systems yet because ... well because even if you have a Mac or Windows machine, developing for the Linux kernel is best done on a Linux machine, and you can always use a VM.
 
-However, I must restate that the goal of this project is to be able to ocntrol the EV3 from any platform that can ssh or telnet to a network.
+However, I must restate that the goal of this project is to be able to control the EV3 from any platform that can ssh or telnet to a network.
 
 Thanks to a generous donor, I now have a Mac, so all the install instructions can now be created for Linux/Mac/Windows systems on one machine :-)
 
