@@ -76,6 +76,8 @@ To get started, just look at the Releases tab and grab the latest and greatest e
 
 [`ev3dev-kernel`](https://github.com/mindboards/ev3dev-kernel) - The source for the kernel. You don't need to download this unless you are going to actually build the kernel. It's a lot easier to just get the microSD card image and kernel/module updates from the `ev3dev` repository.
 
+[`ev3dev-base`](https://github.com/mindboards/ev3dev-base) - The source package for the required base Debian packages. Contains things like firmware, init scripts and udev rules.
+
 [`ev3dev-modules`](https://github.com/mindboards/ev3dev-modules) - The source for the `ev3dev` compatible LEGO MINDSTORMS EV3 drivers. You don't need to download this unless you are going to build the modules, or you want to know a bit more about how the drivers work. The pre-compiled module bundles are in the `ev3dev` repository.
 
 ## 4. How You Can Help
