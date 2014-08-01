@@ -51,6 +51,7 @@ Done
 
 Now check to make sure we're connected:
 
+```
 root@ev3dev:~# bt-device -l
 Added devices:
 Go (10:B7:F6:03:39:68)
