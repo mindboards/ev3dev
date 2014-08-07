@@ -1,13 +1,13 @@
-NOTE: You need to be a member of the ```video``` group to use the LCD.
+NOTE: You need to be a member of the `video` group to use the LCD.
 
 ### Basics
-The ev3 has a 178 x 128 pixels monochrome LCD. The ev3dev video driver provides [standard Linux framebuffer interface](https://www.kernel.org/doc/Documentation/fb/api.txt) and it's possible to write pixel data into ```/dev/fb0``` directly.
+The EV3 has a 178 x 128 pixels monochrome LCD. The ev3dev video driver provides [standard Linux framebuffer interface](https://www.kernel.org/doc/Documentation/fb/api.txt) and it's possible to write pixel data into `/dev/fb0` directly using `write` or `mmap`.
 
 ### The pixel buffer format
 
-Each byte in the buffer represents 8 pixels. Leftmost pixel is in the least significant bit. Value 0 is white and value 1 is black because the driver ```fb_fix_screeninfo#visual``` is set to ```FB_VISUAL_MONO01```.  
-Each row need to be 4 bytes aligned. So it's (178+31)/32*4 = 24 bytes per row, same value as ```fb_fix_screeninfo#line_length```. The total buffer length is 24*128 = 3072 bytes.  
-See the [ev3 video driver code](https://github.com/ev3dev/ev3dev-kernel/blob/ev3dev-jessie/drivers/video/st7586fb.c) for more detail.
+Each byte in the buffer represents 8 pixels. Leftmost pixel is in the least significant bit. Value 0 is white and value 1 is black (`fb_fix_screeninfo#visual` is set to `FB_VISUAL_MONO01`).  
+Each row need to be 4 bytes aligned. So it's (178+31)/32*4 = 24 bytes per row (same value as `fb_fix_screeninfo#line_length`). The total buffer length is 24*128 = 3072 bytes.  
+See the [ev3 video driver code](https://github.com/ev3dev/ev3dev-kernel/blob/ev3dev-jessie/drivers/video/st7586fb.c) for more details.
 
 Suppose below is the pixel buffer
 ```
@@ -20,8 +20,9 @@ row2 10000100  00000000 00000000 ... (total 24 bytes)
 It draws two vertical lines at column 2(0 based index) and column 7 (also 0 based index).
 
 ### POC
-Use python to draw something interesting.  
-**Below code only test on [ev3dev-jessie-2014-07-12](https://github.com/ev3dev/ev3dev/releases/tag/ev3dev-jessie-2014-07-12). ev3dev may change video driver in the future. We recommend developers getting your own console, activate it and set it to graphics mode before write to framebuffer. Plese see https://github.com/ev3dev/brickdm/blob/master/src/BrickDisplayManager.vala as an example**
+Use python to draw something interesting.
+
+**Code below only tested on [ev3dev-jessie-2014-07-12](https://github.com/ev3dev/ev3dev/releases/tag/ev3dev-jessie-2014-07-12). ev3dev may change video driver in the future. We recommend developers getting your own console, activate it and set it to graphics mode before write to framebuffer. Plese see https://github.com/ev3dev/brickdm/blob/master/src/BrickDisplayManager.vala as an example**
 ```
 #!/usr/bin/env python
 
