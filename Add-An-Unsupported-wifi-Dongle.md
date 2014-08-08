@@ -2,6 +2,10 @@
 
 In many cases, you can just plug in your USB wifi dongle and it will "Just Work (tm)" - but sometimes, it just won't. Here's how to get that off brand dongle you bought on DealExtreme to work.
 
+### Don't repeat the past
+
+First, search [issues](https://github.com/ev3dev/ev3dev/issues?q=+label%3AWi-fi+) to see if anyone has discussed this adapter before.
+
 ### Figure out the USB pid/vid
 
 Use the `lsusb` command to dump the current USB device list. For my TPLINK TL-WN725N device, it looks like this:
