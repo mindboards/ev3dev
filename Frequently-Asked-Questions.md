@@ -16,8 +16,8 @@ So, the first thing we need to do is tell the sensor drivers not to use input po
 
 There are a couple useful things you can do with the serial console, so you need to edit one or two more files depending on what you want to accomplish.
 
-1. You can print kernel messages to the serial console. This is useful for debugging drivers. You can see the same information using `dmesg`, so this is really only useful for serious kernel hacking when you cause kernel panics and such. Anyway, to enable kernel messages on the serial console, edit `/etc/sysctl.d/ev3dev/conf` and follow the instructions.
+1. You can print kernel messages to the serial console. This is useful for debugging drivers. You can see the same information using `dmesg`, so this is really only useful for serious kernel hacking when you cause kernel panics and such. Anyway, to enable kernel messages on the serial console, edit `/etc/sysctl.d/ev3dev.conf` and follow the instructions.
 
-2. You can log in via the serial console. This is useful for troubleshooting network connection issues. To enable logging on via the serial console, edit `/etc/inittab` and follow the instructions at the very end of the file.
+2. You can log in via the serial console. This is useful for troubleshooting network connection issues. To enable logging on via the serial console you have to do something different depending on whether you are using wheezy or jessie. In wheezy, edit `/etc/inittab` and follow the instructions at the very end of the file. In jessie, run the command `systemctl unmask getty@ttyS1.service` to enable login and `systemctl mask getty@ttyS1.service` to disable login.
 
 After you have edited these files, you will need to reboot for these changes to take effect.
