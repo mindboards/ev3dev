@@ -71,9 +71,9 @@ This sensor uses the [[msensor|Using the Mindstorms Sensor Device Class]] device
     <td><i>none</i>
   <tr>
     <td><code>dp</code> (decimal places)
+    <td><code>0</code>
     <td><code>1</code>
-    <td><code>1</code>
-    <td><code>1</code>
+    <td><code>0</code>
     <td><code>1</code>
     <td><code>0</code>
 </table>
