@@ -4,7 +4,7 @@ This sensor uses the [[msensor|Using the Mindstorms Sensor Device Class]] device
 
 |              | Value    |
 |:------------:|:--------:|
-|```type_id``` | ```5```  |
+|`type_id`     | `5`      |
 | # Modes      | 5        |
 | Connection   | I2C/M    |
 | Vendor ID    | LEGO     |
@@ -50,16 +50,16 @@ This sensor uses the [[msensor|Using the Mindstorms Sensor Device Class]] device
     <td>Presence of another ultrasonic sensor
   <tr>
     <td>&emsp;Min
-    <td><code>0</code> (0.0&nbsp;cm)
+    <td><code>0</code> (0&nbsp;cm)
     <td><code>0</code> (0.0&nbsp;in)
-    <td><code>0</code> (0.0&nbsp;cm)
+    <td><code>0</code> (0&nbsp;cm)
     <td><code>0</code> (0.0&nbsp;in)
     <td><code>0</code> (no other sensors detected)
   <tr>
     <td>&emsp;Max
-    <td><code>2550</code> (255.0&nbsp;cm)
+    <td><code>255</code> (255&nbsp;cm)
     <td><code>1000</code> (100.0&nbsp;in)
-    <td><code>2550</code> (255.0&nbsp;cm)
+    <td><code>255</code> (255&nbsp;cm)
     <td><code>1000</code> (100.0&nbsp;in)
     <td><code>1</code> (another ultrasonic sensor was detected)
   <tr>
@@ -71,12 +71,12 @@ This sensor uses the [[msensor|Using the Mindstorms Sensor Device Class]] device
     <td><i>none</i>
   <tr>
     <td><code>dp</code> (decimal places)
+    <td><code>0</code>
     <td><code>1</code>
-    <td><code>1</code>
-    <td><code>1</code>
+    <td><code>0</code>
     <td><code>1</code>
     <td><code>0</code>
 </table>
-Values in the tables that look like ```this``` are the names of sysfs attributes or values returned by said attributes.
+Values in the tables that look like `this` are the names of sysfs attributes or values returned by said attributes.
 
-<a name="note1" />[1]: The value is read when the mode is set and does not change - even when polling is enabled. To read a new value, set the mode again (e.g. ```echo NXT-US-SI-CM > mode```).
+<a name="note1" />[1]: The value is read when the mode is set and does not change - even when polling is enabled. To read a new value, set the mode again (e.g. `echo NXT-US-SI-CM > mode`).
