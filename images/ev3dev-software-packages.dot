@@ -1,0 +1,213 @@
+graph G {
+	compound=true;
+	arrowType=none;
+	node [shape=rect];
+	edge [penwidth=0,minlen=1];
+
+	subgraph cluster_150 {
+	
+		label = "Host Platform (PC)"
+
+		subgraph cluster_108 {
+			label = "Cross Compilation Toolchains";
+
+			subgraph cluster_107 {
+				label="Vendor\nSupplied";
+				style=filled;
+				fillcolor=white;
+				node [shape=rect,style="filled,rounded",color=cornsilk3,width=2,height=0.7];
+				"Mentor Graphics"--"Linaro"; 
+			};
+
+			subgraph cluster_106 {
+				label="Docker Images\nARM-only Arch";
+				style=filled;
+				fillcolor=paleturquoise;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=2,height=0.7];
+				"ev3dev/\ndebian-jessie-\n<arch>-cross"--"ev3dev/\ndebian-stretch-\n<arch>-cross"; 
+			};
+
+			subgraph cluster_105 {
+				label="Docker Images\nMulti-Arch";
+				style=filled;
+				fillcolor=paleturquoise;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=2,height=0.7];
+				"ev3dev/\ndebian-jessie-cross"--"ev3dev/\ndebian-stretch-cross"; 
+			};
+
+		};
+
+		subgraph cluster_104 {
+			label="ev3dev Build Tools";
+			
+			subgraph cluster_103 {
+				label="EV3 BootImage\nBuild Tool";
+				style=filled;
+				fillcolor=paleturquoise;
+				node [shape=rect,style="filled,rounded",color=goldenrod1,width=2,height=0.7];
+				"brickstrap"; 
+			};
+
+			subgraph cluster_102 {
+				label="Docker Image\nGenerator Scripts";
+				style=filled;
+				fillcolor=paleturquoise;
+				node [shape=rect,style="filled,rounded",color=goldenrod1,width=2,height=0.7];
+				"Cross-compiler\nev3dev/\ndocker-library"--"QEMU Base Image\nev3dev/\ndocker-base"; 
+			};
+	
+		};
+		"ev3dev/\ndebian-stretch-\n<arch>-cross"--"brickstrap";		// Dummy link for stacking
+		"ev3dev/\ndebian-stretch-cross"--"Cross-compiler\nev3dev/\ndocker-library"		// Dummy link for stacking
+
+		subgraph cluster_101 {
+			label = "Host Applications";
+			subgraph cluster_100 {
+				label="Remote Access";
+				style=filled;
+				fillcolor=plum;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=2,height=0.7];
+				"OpenSSH"; 
+			};
+		};
+	
+	};
+
+	subgraph cluster_15 {
+
+		label = "Target Platform (Robot Controller)";
+	
+		subgraph cluster_14 {
+			label = "Target Applications";
+			
+			subgraph cluster_13 {
+				label="Native Compiler Tools";
+				style=filled;
+				fillcolor=plum;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=2,height=0.7];
+				"build-essential";
+			};
+			
+			subgraph cluster_12 {
+				label="ev3dev specific";
+				style=filled;
+				fillcolor=paleturquoise;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=2,height=0.7];
+				"ev3dev-config\n(ev3dev-tools)"; "brickrun"; 
+				"Brickman"; "NXTCamView5";
+				"brickrun"--"Brickman";	// Dummy link for stacking
+				"ev3dev-config\n(ev3dev-tools)"--"NXTCamView5";	// Dummy link for stacking
+			};
+		
+		};
+		
+		subgraph cluster_11 {
+			label = "Mid Level Library Packages";
+
+			subgraph cluster_10 {
+				label="ev3dev ported";
+				style=filled;
+				fillcolor=grey;
+				node [shape=rect,style="filled,rounded",color=goldenrod1,width=2];
+				"Embedded\nPython\n(micrpython)";
+			};
+
+			subgraph cluster_9 {
+				label="Vision";
+				style=filled;
+				fillcolor=paleturquoise;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=2];
+				"CMUCam5 Pixy\nVision Library\n(pixy)";
+			};
+
+
+			subgraph cluster_8 {
+				label = "Graphics";
+				style=filled;
+				fillcolor=paleturquoise;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=2];
+				"GRX3 UI\nWidgets\n(grx-widgets)"--"GRX3 UI\nLibrary\n(grx)"
+				--"GLib/\nGObject Library\n(ev3devKit)";
+			};
+		};
+	
+		"Brickman"--"GRX3 UI\nWidgets\n(grx-widgets)" [penwidth=1];
+		"NXTCamView5"--"CMUCam5 Pixy\nVision Library\n(pixy)" [penwidth=1];
+
+		subgraph cluster_7 {
+			label = "Low Level Library Packages";
+
+			subgraph cluster_6 {
+				label="ev3dev ported";
+				style=filled;
+				fillcolor=grey;
+				node [shape=rect,style="filled,rounded",color=goldenrod1,width=2,height=0.7];
+				"Modular Micro-\nPython Library\n(micropython-lib)"; "Micro-Python\nLinux Library\n(micropython-linux)";
+			};
+
+
+			subgraph cluster_5 {
+				label = "Debian-derived Libraries";
+				style=filled;
+				fillcolor=plum;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=3,height=0.7];
+				"???"
+			};
+
+		subgraph cluster_4 {
+			label = "ev3dev specific";
+			style=filled;
+			fillcolor=paleturquoise;
+			node [shape=rect,style="filled,rounded",color=navajowhite,width=3,height=0.7];
+			"SysFS Driver Library\n(lego-linux-drivers)";
+
+			};
+		};
+
+		
+
+		subgraph cluster_3 {
+			label = "Linux Daemons"
+			subgraph cluster_1 {
+				label = "Debian-derived";
+				style=filled;
+				fillcolor=plum;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=1];
+				rank = same;
+				"systemd"; "connman"; "avahi"; "bluez"; "opensshd"; 
+			};
+
+			subgraph cluster_2 {
+				label = "ev3dev specific";
+				style=filled;
+				fillcolor=paleturquoise;
+				node [shape=rect,style="filled,rounded",color=navajowhite,width=2];
+				rank = same;
+				"brickd";
+			};
+
+		};
+	
+		subgraph cluster_0 {
+			label = "Linux Kernel";
+			style=filled;
+			fillcolor=lightgrey;
+			node [style=filled,color=navajowhite, shape=invhouse,width=2,height=1.3];
+			rank = same; "etc."; "rpi-kernel\n(Raspbian)\n[Raspberrypi.org]"; "..."; 
+			"ev3-kernel\n(Debian mainline)\n[Debian.org]"; "bb-kernel\n(eLinux)\n[Beagleboard.org]"; 
+		};
+
+		edge [penwidth=0];
+	
+		"Embedded\nPython\n(micrpython)"--"Modular Micro-\nPython Library\n(micropython-lib)";
+
+		"Modular Micro-\nPython Library\n(micropython-lib)"--"avahi"
+		"GLib/\nGObject Library\n(ev3devKit)"--"SysFS Driver Library\n(lego-linux-drivers)"
+		"???"--"avahi"
+		"SysFS Driver Library\n(lego-linux-drivers)"--"brickd" [ltail=cluster_4, lhead=cluster_3];
+		"avahi"--"..." [ltail=cluster_1,lhead=cluster_0];
+		"brickd"--"..." [ltail=cluster_2,lhead=cluster_0];
+
+	};
+
+}
